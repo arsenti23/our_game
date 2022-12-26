@@ -1,3 +1,5 @@
+# version 1.1
+
 import pygame
 from Menu import Menu
 from game_over import Game_over
