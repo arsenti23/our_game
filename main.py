@@ -1,6 +1,7 @@
 import os
 import sys
 import pygame
+import time
 
 
 def load_level(filename):
@@ -69,12 +70,20 @@ def move(player, vector):
     x, y = x // 50, y // 50
     if vector == 'LEFT' and (level[y][x - 1] == '.' or level[y][x - 1] == '@'):
         player.update(x - 1, y)
+        if x - 1 == 0:
+            end_screen()
     elif vector == 'RIGHT' and (level[y][x + 1] == '.' or level[y][x + 1] == '@'):
         player.update(x + 1, y)
+        if x + 1 == 15:
+            end_screen()
     elif vector == 'UP' and (level[y - 1][x] == '.' or level[y - 1][x] == '@'):
         player.update(x, y - 1)
+        if y - 1 == 0:
+            end_screen()
     elif vector == 'DOWN' and (level[y + 1][x] == '.' or level[y + 1][x] == '@'):
         player.update(x, y + 1)
+        if y + 1 == 15:
+            end_screen()
 
 
 def terminate():
@@ -83,12 +92,16 @@ def terminate():
 
 
 def start_screen():
-    intro_text = ["ЗАСТАВКА", "",
-                  "Правила игры",
-                  "Если в правилах несколько строк,",
-                  "приходится выводить их построчно"]
+    intro_text = ["                                                       ИГРА",
+                  "                                                  ЛАБИРИНТ",
+                  "",
+                  "",
+                  "",
+                  "",
+                  "                                                      Играть",
+                  "                                                      Выход"]
 
-    fon = pygame.transform.scale(load_image('fon.jpg'), (width, height))
+    fon = pygame.transform.scale(load_image('fon.jpeg'), (width, height))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 50
@@ -105,8 +118,48 @@ def start_screen():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                return  # начинаем игру
+                print(event.pos)
+                if 335 < event.pos[0] < 400 and 240 < event.pos[1] < 255:
+                    tm1 = time.perf_counter()
+                    return tm1
+                if 335 < event.pos[0] < 400 and 270 < event.pos[1] < 290:
+                    terminate()
+        pygame.display.flip()
+        clock.tick(FPS)
 
+def end_screen():
+    tm2 = time.perf_counter()
+    intro_text = ["",
+                  "                                                     ПОБЕДА",
+                  "                                                Ваш результат:",
+                  f"                                                   {round(tm2 - tm1)} секунд(ы)",
+                  "",
+                  "",
+                  "",
+                  "                                                      ВЫЙТИ"]
+
+    fon = pygame.transform.scale(load_image('end_fon.png'), (width, height))
+    screen.blit(fon, (0, 0))
+    font = pygame.font.Font(None, 30)
+    text_coord = 50
+    for line in intro_text:
+        string_rendered = font.render(line, 1, pygame.Color('black'))
+        intro_rect = string_rendered.get_rect()
+        text_coord += 10
+        intro_rect.top = text_coord
+        intro_rect.x = 10
+        text_coord += intro_rect.height
+        screen.blit(string_rendered, intro_rect)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                print(event.pos)
+                if 335 < event.pos[0] < 400 and 240 < event.pos[1] < 255:
+                    return
+                if 335 < event.pos[0] < 400 and 270 < event.pos[1] < 290:
+                    terminate()
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -123,6 +176,7 @@ if __name__ == '__main__':
     tile_width = 50
     tile_height = 50
     FPS = 50
+    tm = 0
 
     player_image = load_image('mar.png')
     tile_images = {
@@ -132,7 +186,7 @@ if __name__ == '__main__':
 
     level = load_level('level_1.txt')
     player, level_x, level_y = generate_level(level)
-    start_screen()
+    tm1 = start_screen()
 
     while True:
         for event in pygame.event.get():
@@ -153,7 +207,6 @@ if __name__ == '__main__':
 
                 if event.key == pygame.K_DOWN:
                     move(player, 'DOWN')
-
         screen.fill((255, 255, 255))
         tiles_group.draw(screen)
         player_group.draw(screen)
