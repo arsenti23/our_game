@@ -7,7 +7,6 @@ import sys
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
-    # если файл не существует, то выходим
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
@@ -84,12 +83,12 @@ class Menu(pygame.sprite.Sprite):
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if 245 <= event.pos[0] <= 445 and 285 <= event.pos[1] <= 370:
                         print(event.pos, 1)
-                        start_game()
+                        # start_game()
                     elif 245 <= event.pos[0] <= 570 and 390 <= event.pos[1] <= 475:
-                        records()
+                        print(2)
+                        # records()
                     elif 245 <= event.pos[0] <= 495 and 495 <= event.pos[1] <= 580:
                         self.terminate()
-                # return  # начинаем игру
             pygame.display.flip()
             self.clock.tick(self.FPS)
 
