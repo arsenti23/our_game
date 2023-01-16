@@ -33,7 +33,11 @@ class Menu(pygame.sprite.Sprite):
         self.FPS = 50
         self.running = True
         self.start_screen()
+        self.update()
 
+    def terminate(self):
+        pygame.quit()
+        sys.exit()
 
     def start_screen(self):
         intro_text = ["Инструкция.", "Вам дано три пункта:",
@@ -53,15 +57,7 @@ class Menu(pygame.sprite.Sprite):
             text_coord += intro_rect.height
             self.screen.blit(string_rendered, intro_rect)
         self.buttons()
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                elif event.type == pygame.KEYDOWN or \
-                        event.type == pygame.MOUSEBUTTONDOWN:
-                    return  # начинаем игру
-            pygame.display.flip()
-            self.clock.tick(self.FPS)
+
 
     def buttons(self):
         name_buttons = ['Старт', 'Рекорды', 'Выход']
@@ -75,12 +71,27 @@ class Menu(pygame.sprite.Sprite):
             intro_rect.top = text_coord
             intro_rect.x = 250
             text_coord += intro_rect.height
-            pygame.draw.rect(self.screen, (0, 0, 255), (intro_rect[0] - 10, intro_rect[1] - 10, intro_rect[2] + 20, intro_rect[3] + 20), 4)
+            pygame.draw.rect(self.screen, (0, 0, 255), (intro_rect[0] - 10, intro_rect[1] - 10, intro_rect[2] + 20,
+                                                        intro_rect[3] + 20), 4)
             self.screen.blit(string_rendered, intro_rect)
 
 
     def update(self):
-        pass
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.terminate()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if 245 <= event.pos[0] <= 445 and 285 <= event.pos[1] <= 370:
+                        print(event.pos, 1)
+                        start_game()
+                    elif 245 <= event.pos[0] <= 570 and 390 <= event.pos[1] <= 475:
+                        records()
+                    elif 245 <= event.pos[0] <= 495 and 495 <= event.pos[1] <= 580:
+                        self.terminate()
+                # return  # начинаем игру
+            pygame.display.flip()
+            self.clock.tick(self.FPS)
 
 
 if __name__ == '__main__':

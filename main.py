@@ -8,20 +8,6 @@ if __name__ == '__main__':
     size = width, height = 800, 400 # разрешение экрана
     screen = pygame.display.set_mode(size)
 
-
-    # для Толи
-
-
-
-    # для Паши
-
-
-
-    # для Арсентия
-
-
-
-
     running = True
     while running:
         # внутри игрового цикла ещё один цикл
@@ -32,19 +18,6 @@ if __name__ == '__main__':
                 running = False
 
         # отрисовка и изменение свойств объектов
-        # ...
-
-        # обновление экрана
-
-
-        # для Толи
-
-
-        # для Паши
-
-
-        # для Арсентия
-
 
         pygame.display.flip()
     pygame.quit()
