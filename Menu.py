@@ -83,6 +83,7 @@ class Menu(pygame.sprite.Sprite):
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if 245 <= event.pos[0] <= 445 and 285 <= event.pos[1] <= 370:
                         print(event.pos, 1)
+
                         # start_game()
                     elif 245 <= event.pos[0] <= 570 and 390 <= event.pos[1] <= 475:
                         print(2)
