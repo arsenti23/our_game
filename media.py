@@ -1,15 +1,7 @@
-import os
-import sys
 import pygame
-from player import Player
-from player import Tile
-from Menu import Menu
+
 
 class Media:
-    def __init__(self, filename, name, level):
-        self.filename = filename
-        self.name = name
-        self.level = level
     def load_level(self, filename):
         filename = 'data/' + self.filename
         with open(filename, 'r') as mapFile:

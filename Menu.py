@@ -43,7 +43,7 @@ class Menu(pygame.sprite.Sprite):
                       "Старт - запускается игра.",
                       "Рекорды - лучшие результаты игр.",
                       "Выход - выйти из игры."]
-        fon = pygame.transform.scale(load_image('fon.png'), (self.width, self.height))
+        fon = pygame.transform.scale(load_image('fon.jpg'), (self.width, self.height))
         self.screen.blit(fon, (0, 0))
         font = pygame.font.Font(None, 30)
         text_coord = 50
