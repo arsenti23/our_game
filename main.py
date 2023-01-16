@@ -2,6 +2,7 @@ import pygame
 from Menu import Menu
 from game_over import Game_over
 from player import Player
+from media import Media
 
 if __name__ == '__main__':
     pygame.init()
@@ -10,14 +11,8 @@ if __name__ == '__main__':
 
     running = True
     while running:
-        # внутри игрового цикла ещё один цикл
-        # приема и обработки сообщений
         for event in pygame.event.get():
-            # при закрытии окна
             if event.type == pygame.QUIT:
                 running = False
-
-        # отрисовка и изменение свойств объектов
-
         pygame.display.flip()
     pygame.quit()
