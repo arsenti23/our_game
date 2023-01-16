@@ -19,7 +19,10 @@ class Player(pygame.sprite.Sprite, Menu):
             tile_width * pos_x + 15, tile_height * pos_y + 5)
 
     def update(self, x, y):
-        pass
+        pos_x, pos_y = x, y
+        self.pos = tile_width * pos_x + 15, tile_height * pos_y + 5
+        self.rect = self.image.get_rect().move(
+            tile_width * pos_x + 15, tile_height * pos_y + 5)
 
 tile_width = 50
 tile_height = 50

@@ -1,22 +1,41 @@
 import os
 import sys
 import pygame
+from player import Player
+from player import Tile
+from Menu import Menu
 
-def load_level(filename):
-    filename = 'data/' + filename
-    # читаем уровень, убирая символы перевода строки
-    with open(filename, 'r') as mapFile:
-        level_map = [line.strip() for line in mapFile]
+class Media:
+    def __init__(self, filename, name, level):
+        self.filename = filename
+        self.name = name
+        self.level = level
+    def load_level(self, filename):
+        filename = 'data/' + self.filename
+        with open(filename, 'r') as mapFile:
+            self.level_map = [line.strip() for line in mapFile]
+        max_width = max(map(len, self.level_map))
+        return list(map(lambda x: x.ljust(max_width, '.'), self.level_map))
 
-    # и подсчитываем максимальную длину
-    max_width = max(map(len, level_map))
-    return list(map(lambda x: x.ljust(max_width, '.'), level_map))
+    def load_image(self, name, colorkey=None):
+        fullname = os.path.join('data', self.name)
+        if not os.path.isfile(fullname):
+            print(f"Файл с изображением '{fullname}' не найден")
+            sys.exit()
+        image = pygame.image.load(fullname)
+        return image
 
-def load_image(name, colorkey=None):
-    fullname = os.path.join('data', name)
-    # если файл не существует, то выходим
-    if not os.path.isfile(fullname):
-        print(f"Файл с изображением '{fullname}' не найден")
-        sys.exit()
-    image = pygame.image.load(fullname)
-    return image
+    def generate_level(self, level):
+        new_player, x, y = None, None, None
+        for y in range(len(self.level)):
+            for x in range(len(self.level[y])):
+                if self.level[y][x] == '.':
+                    Tile('empty', x, y)
+                elif self.level[y][x] == '#':
+                    Tile('wall', x, y)
+                elif self.level[y][x] == '@':
+                    Tile('empty', x, y)
+                    new_player = Player(x, y)
+        return new_player, x, y
+
+med = Media()
