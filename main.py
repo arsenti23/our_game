@@ -156,7 +156,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             player.missile()
 
-    collides = pygame.sprite.spritecollide(player, bombs, False)
+    collides = pygame.sprite.spritecollide(player, bombs, False)  # столкновения бомбы и игрока
     if collides:
         gm = Game_over(True)
         gm.update()
