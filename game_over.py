@@ -5,7 +5,7 @@ import pygame
 
 class Game_over(pygame.sprite.Sprite):
     pygame.init()
-    pygame.display.set_caption('Game over')
+    pygame.display.set_caption('Tank. Game over')
     size = width, height = 600, 300
     screen = pygame.display.set_mode(size)
     running = True

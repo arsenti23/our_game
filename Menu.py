@@ -3,7 +3,7 @@
 import pygame
 import os
 import sys
-from main import Player
+
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
@@ -16,20 +16,12 @@ def load_image(name, colorkey=None):
 
 class Menu(pygame.sprite.Sprite):
     def __init__(self):
-        '''Заставка появляется, играет музыка, появляется фон'''
-
+        '''Заставка появляется, появляется фон'''
         pygame.init()
-
         self.size = self.width, self.height = 800, 800
         self.screen = pygame.display.set_mode(self.size)
-        pygame.display.set_caption('.')
+        pygame.display.set_caption('Tank')
         self.clock = pygame.time.Clock()
-        self.all_sprites = pygame.sprite.Group()
-        self.tiles_group = pygame.sprite.Group()
-        self.player_group = pygame.sprite.Group()
-        self.tile_width = 50
-        self.tile_height = 50
-        self.FPS = 50
         self.running = True
         self.start_screen()
         self.update()
@@ -43,7 +35,7 @@ class Menu(pygame.sprite.Sprite):
                       "Старт - запускается игра.",
                       "Рекорды - лучшие результаты игр.",
                       "Выход - выйти из игры."]
-        fon = pygame.transform.scale(load_image('fon.png'), (self.width, self.height))
+        fon = pygame.transform.scale(load_image('fon2.png'), (self.width, self.height))
         self.screen.blit(fon, (0, 0))
         font = pygame.font.Font(None, 30)
         text_coord = 50
@@ -56,7 +48,6 @@ class Menu(pygame.sprite.Sprite):
             text_coord += intro_rect.height
             self.screen.blit(string_rendered, intro_rect)
         self.buttons()
-
 
     def buttons(self):
         name_buttons = ['Старт', 'Рекорды', 'Выход']
@@ -74,7 +65,6 @@ class Menu(pygame.sprite.Sprite):
                                                         intro_rect[3] + 20), 4)
             self.screen.blit(string_rendered, intro_rect)
 
-
     def update(self):
         while True:
             for event in pygame.event.get():
@@ -83,7 +73,7 @@ class Menu(pygame.sprite.Sprite):
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if 245 <= event.pos[0] <= 445 and 285 <= event.pos[1] <= 370:
                         print(event.pos, 1)
-                        player = Player()
+
                         # start_game()
                     elif 245 <= event.pos[0] <= 570 and 390 <= event.pos[1] <= 475:
                         print(2)
@@ -91,7 +81,6 @@ class Menu(pygame.sprite.Sprite):
                     elif 245 <= event.pos[0] <= 495 and 495 <= event.pos[1] <= 580:
                         self.terminate()
             pygame.display.flip()
-            self.clock.tick(self.FPS)
 
 
 if __name__ == '__main__':

@@ -2,12 +2,13 @@ import pygame
 import os
 import sys
 import random
+import schedule
 from game_over import Game_over
 
 pygame.init()
 size = width, height = 600, 700
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Shooter")
+pygame.display.set_caption("Tank")
 running = True
 color1 = (0, 0, 0)
 color2 = (255, 255, 255)
@@ -31,7 +32,28 @@ def load_image(name, colorkey=None):
     return image
 
 
-class Player(pygame.sprite.Sprite):
+def scores():
+    text_coord = 50
+    font = pygame.font.Font(None, 30)
+    text = font.render('rdgdgd', True, color2)
+    intro_rect = text.get_rect()
+    intro_rect.top = text_coord
+    intro_rect.x = 10
+    screen.blit(text, intro_rect)
+
+
+def terminate(self):
+    pygame.quit()
+    sys.exit()
+
+
+def draw(screen, number):
+    font = pygame.font.Font(None, 30)
+    text = font.render(f"Счет: {number}", True, (100, 255, 100))
+    screen.blit(text, (10, 10))
+
+
+class Player(pygame.sprite.Sprite):  # игрок
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.w, self.h = 70, 70
@@ -62,7 +84,7 @@ class Player(pygame.sprite.Sprite):
         missiles.add(missile)
 
 
-class Missile(pygame.sprite.Sprite):
+class Missile(pygame.sprite.Sprite):  # снаряд
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.w, self.h = 5, 20
@@ -80,7 +102,7 @@ class Missile(pygame.sprite.Sprite):
             self.kill()
 
 
-class Bomb(pygame.sprite.Sprite):
+class Bomb(pygame.sprite.Sprite):  # бомбы
     image = load_image("bomb2.png")
     image_boom = load_image("boom.png")
 
@@ -105,9 +127,23 @@ class Bomb(pygame.sprite.Sprite):
         self.image = self.image_boom
 
 
-def terminate(self):
-    pygame.quit()
-    sys.exit()
+class Bomb_boom(pygame.sprite.Sprite):
+    def __init__(self, r_center):
+        pygame.sprite.Sprite.__init__(self)
+        self.image_boom = load_image("boom.png")
+        self.image = self.image_boom
+        self.rect = self.image.get_rect()
+        self.rect.center = r_center
+
+    def update(self):
+        r_center = self.rect.center
+        self.image = self.image_boom
+        self.rect = self.image.get_rect()
+        self.rect.center = r_center
+        r = 0
+        if r == 0:
+            self.kill()
+            r = 1
 
 
 player = Player()
@@ -117,7 +153,7 @@ for i in range(7):
     all_sprites.add(bomb)
     bombs.add(bomb)
 
-dd = 0
+score = 0
 
 while running:
     clock.tick(FPS)
@@ -132,19 +168,24 @@ while running:
         gm = Game_over()
         running = False
 
-
     collides = pygame.sprite.groupcollide(bombs, missiles, True, True)
     for i in collides:
-        dd += 1
+        score += 1
+        r = 0
+        bm = Bomb_boom(i.rect.center)
+        all_sprites.add(bm)
         bomb = Bomb()
         all_sprites.add(bomb)
         bombs.add(bomb)
-        print(dd)
 
-
-
+    pygame.display.update()
     all_sprites.update()
     screen.fill(color1)
+    draw(screen, str(score))
     all_sprites.draw(screen)
     pygame.display.flip()
+
+f = open("data/score.txt", 'a')
+print(str(score), file=f)
+f.close()
 pygame.quit()
