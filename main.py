@@ -2,6 +2,7 @@ import pygame
 import os
 import sys
 import random
+from menu import Menu
 from game_over import Game_over
 
 pygame.init()
@@ -9,16 +10,13 @@ size = width, height = 600, 700
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Tank")
 running = True
+clock = pygame.time.Clock()
+FPS = 120
 color1 = (0, 0, 0)
 color2 = (255, 255, 255)
 color3 = (255, 0, 0)
 color4 = (0, 255, 0)
 color5 = (0, 0, 255)
-clock = pygame.time.Clock()
-FPS = 120
-all_sprites = pygame.sprite.Group()
-bombs = pygame.sprite.Group()
-missiles = pygame.sprite.Group()
 
 
 def load_image(name, colorkey=None):
@@ -29,16 +27,6 @@ def load_image(name, colorkey=None):
         sys.exit()
     image = pygame.image.load(fullname)
     return image
-
-
-def scores():
-    text_coord = 50
-    font = pygame.font.Font(None, 30)
-    text = font.render('rdgdgd', True, color2)
-    intro_rect = text.get_rect()
-    intro_rect.top = text_coord
-    intro_rect.x = 10
-    screen.blit(text, intro_rect)
 
 
 def terminate():
@@ -135,7 +123,6 @@ class Bomb_boom(pygame.sprite.Sprite):
         self.rect.center = r_center
         self.time1 = pygame.time.get_ticks()
 
-
     def update(self):
         self.time_boom = 1000
         self.time2 = pygame.time.get_ticks()
@@ -149,7 +136,9 @@ class Bomb_boom(pygame.sprite.Sprite):
         self.rect.center = r_center
 
 
-
+all_sprites = pygame.sprite.Group()
+bombs = pygame.sprite.Group()
+missiles = pygame.sprite.Group()
 player = Player()
 all_sprites.add(player)
 for i in range(7):
@@ -169,26 +158,24 @@ while running:
 
     collides = pygame.sprite.spritecollide(player, bombs, False)
     if collides:
-        gm = Game_over()
+        gm = Game_over(True)
+        gm.update()
         running = False
 
     collides = pygame.sprite.groupcollide(bombs, missiles, True, True)
     for i in collides:
         score += 1
-        r = 0
         bm = Bomb_boom(i.rect.center)
         all_sprites.add(bm)
         bomb = Bomb()
         all_sprites.add(bomb)
         bombs.add(bomb)
-
     pygame.display.update()
     all_sprites.update()
     screen.fill(color1)
     draw(screen, str(score))
     all_sprites.draw(screen)
     pygame.display.flip()
-
 f = open("data/score.txt", 'a')
 print(str(score), file=f)
 f.close()

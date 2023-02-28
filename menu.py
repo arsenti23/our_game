@@ -16,8 +16,10 @@ def load_image(name, colorkey=None):
 
 class Menu(pygame.sprite.Sprite):
     def __init__(self):
+        super().__init__()
         '''Заставка появляется, появляется фон'''
         pygame.init()
+
         self.size = self.width, self.height = 800, 800
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption('Tank')
@@ -67,21 +69,24 @@ class Menu(pygame.sprite.Sprite):
 
     def update(self):
         while True:
+            self.rr = 0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.terminate()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if 245 <= event.pos[0] <= 445 and 285 <= event.pos[1] <= 370:
                         print(event.pos, 1)
+                        self.rr = 0
 
-                        # start_game()
+
                     elif 245 <= event.pos[0] <= 570 and 390 <= event.pos[1] <= 475:
                         print(2)
-                        # records()
+                        f = open("data/score.txt", 'r')
+                        print(f.read())
+                        f.close()
                     elif 245 <= event.pos[0] <= 495 and 495 <= event.pos[1] <= 580:
                         self.terminate()
             pygame.display.flip()
 
 
-if __name__ == '__main__':
-    menu = Menu()
+
