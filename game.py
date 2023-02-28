@@ -40,6 +40,7 @@ class Player(pygame.sprite.Sprite):
         elif self.rect.left < 0:
             self.rect.left = width - self.w
 
+
 class Bomb(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -47,14 +48,18 @@ class Bomb(pygame.sprite.Sprite):
         self.image = pygame.Surface((self.w, self.h))
         self.image.fill(color3)
         self.rect = self.image.get_rect()
+
     def update(self):
         pass
+
 
 class Missile(pygame.sprite.Sprite):
     def __init__(self):
         pass
-    def update:
+
+    def update(self):
         pass
+
 
 def terminate(self):
     pygame.quit()
