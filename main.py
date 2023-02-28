@@ -2,7 +2,6 @@ import pygame
 import os
 import sys
 import random
-import schedule
 from game_over import Game_over
 
 pygame.init()
@@ -42,7 +41,7 @@ def scores():
     screen.blit(text, intro_rect)
 
 
-def terminate(self):
+def terminate():
     pygame.quit()
     sys.exit()
 
@@ -134,16 +133,21 @@ class Bomb_boom(pygame.sprite.Sprite):
         self.image = self.image_boom
         self.rect = self.image.get_rect()
         self.rect.center = r_center
+        self.time1 = pygame.time.get_ticks()
+
 
     def update(self):
+        self.time_boom = 1000
+        self.time2 = pygame.time.get_ticks()
+        print(2, self.time2)
+        if self.time2 - self.time1 >= self.time_boom:
+            self.time1 = self.time2
+            self.kill()
         r_center = self.rect.center
         self.image = self.image_boom
         self.rect = self.image.get_rect()
         self.rect.center = r_center
-        r = 0
-        if r == 0:
-            self.kill()
-            r = 1
+
 
 
 player = Player()
