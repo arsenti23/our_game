@@ -176,6 +176,7 @@ while running:
     draw(screen, str(score))
     all_sprites.draw(screen)
     pygame.display.flip()
+
 f = open("data/score.txt", 'a')
 print(str(score), file=f)
 f.close()
