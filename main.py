@@ -9,14 +9,17 @@ pygame.init()
 size = width, height = 600, 700
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Shooter")
-clock = pygame.time.Clock()
 running = True
 color1 = (0, 0, 0)
 color2 = (255, 255, 255)
 color3 = (255, 0, 0)
 color4 = (0, 255, 0)
 color5 = (0, 0, 255)
+clock = pygame.time.Clock()
 FPS = 120
+all_sprites = pygame.sprite.Group()
+bombs = pygame.sprite.Group()
+missiles = pygame.sprite.Group()
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
@@ -31,9 +34,6 @@ def load_image(name, colorkey=None):
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        image = load_image("bomb2.png")
-        self.image = image
-        self.rect = self.image.get_rect()
         self.w, self.h = 70, 70
         self.image = pygame.Surface((self.w, self.h))
         self.image.fill(color5)
@@ -82,11 +82,13 @@ class Missile(pygame.sprite.Sprite):
 
 
 class Bomb(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.w, self.h = 30, 30
-        self.image = pygame.Surface((self.w, self.h))
-        self.image.fill(color3)
+    image = load_image("bomb2.png")
+    image_boom = load_image("boom.png")
+
+    def __init__(self, *group):
+        super().__init__(*group)
+        self.imag = Bomb.image
+        self.image = pygame.transform.scale(self.imag, (50, 50))
         self.rect = self.image.get_rect()
         self.create()
 
@@ -95,10 +97,15 @@ class Bomb(pygame.sprite.Sprite):
         if self.rect.y > height + 10:
             self.create()
 
+
     def create(self):
         self.rect.x = random.randrange(width - self.rect.width)
         self.rect.y = random.randrange(-200, -30)
         self.bomb_coord_y = random.randrange(1, 4)
+
+    def boom(self):
+        self.image = self.image_boom
+
 
 
 def terminate(self):
@@ -106,9 +113,7 @@ def terminate(self):
     sys.exit()
 
 
-all_sprites = pygame.sprite.Group()
-bombs = pygame.sprite.Group()
-missiles = pygame.sprite.Group()
+
 player = Player()
 all_sprites.add(player)
 for i in range(7):
@@ -130,7 +135,6 @@ while running:
         all_sprites.add(bomb)
         bombs.add(bomb)
 
-    # Проверка, не ударил ли моб игрока
     collides = pygame.sprite.spritecollide(player, bombs, False)
     if collides:
         running = False
