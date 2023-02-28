@@ -28,10 +28,8 @@ class Player(pygame.sprite.Sprite):
         self.coordx = 0
 
     def update(self):
-
         self.coordx = 0
         if event.type == pygame.KEYDOWN:
-
             if event.key == pygame.K_LEFT:
                 self.coordx = -1
             if event.key == pygame.K_RIGHT:
@@ -41,6 +39,22 @@ class Player(pygame.sprite.Sprite):
             self.rect.right = 0 + self.w
         elif self.rect.left < 0:
             self.rect.left = width - self.w
+
+class Bomb(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.w, self.h = 70, 70
+        self.image = pygame.Surface((self.w, self.h))
+        self.image.fill(color3)
+        self.rect = self.image.get_rect()
+    def update(self):
+        pass
+
+class Missile(pygame.sprite.Sprite):
+    def __init__(self):
+        pass
+    def update:
+        pass
 
 def terminate(self):
     pygame.quit()
