@@ -4,7 +4,6 @@ import sys
 import random
 from game_over import Game_over
 
-
 pygame.init()
 size = width, height = 600, 700
 screen = pygame.display.set_mode(size)
@@ -21,6 +20,7 @@ all_sprites = pygame.sprite.Group()
 bombs = pygame.sprite.Group()
 missiles = pygame.sprite.Group()
 
+
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     # если файл не существует, то выходим
@@ -35,8 +35,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.w, self.h = 70, 70
-        self.image = pygame.Surface((self.w, self.h))
-        self.image.fill(color5)
+        self.imag = load_image("tank.png")
+        self.image = pygame.transform.scale(self.imag, (self.w, self.h))
         self.rect = self.image.get_rect()
         self.x, self.y = width // 2, height - 40
         self.rect.center = self.x, self.y
@@ -46,7 +46,6 @@ class Player(pygame.sprite.Sprite):
         self.playerx = 0
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                print(3)
                 self.playerx = -1
             if event.key == pygame.K_RIGHT:
                 self.playerx = 1
@@ -97,7 +96,6 @@ class Bomb(pygame.sprite.Sprite):
         if self.rect.y > height + 10:
             self.create()
 
-
     def create(self):
         self.rect.x = random.randrange(width - self.rect.width)
         self.rect.y = random.randrange(-200, -30)
@@ -107,11 +105,9 @@ class Bomb(pygame.sprite.Sprite):
         self.image = self.image_boom
 
 
-
 def terminate(self):
     pygame.quit()
     sys.exit()
-
 
 
 player = Player()
@@ -121,6 +117,8 @@ for i in range(7):
     all_sprites.add(bomb)
     bombs.add(bomb)
 
+dd = 0
+
 while running:
     clock.tick(FPS)
     for event in pygame.event.get():
@@ -129,16 +127,21 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             player.missile()
 
+    collides = pygame.sprite.spritecollide(player, bombs, False)
+    if collides:
+        gm = Game_over()
+        running = False
+
+
     collides = pygame.sprite.groupcollide(bombs, missiles, True, True)
     for i in collides:
+        dd += 1
         bomb = Bomb()
         all_sprites.add(bomb)
         bombs.add(bomb)
+        print(dd)
 
-    collides = pygame.sprite.spritecollide(player, bombs, False)
-    if collides:
-        running = False
-        gm = Game_over()
+
 
     all_sprites.update()
     screen.fill(color1)
