@@ -3,7 +3,7 @@
 import pygame
 import os
 import sys
-
+from main import Player
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
@@ -83,7 +83,7 @@ class Menu(pygame.sprite.Sprite):
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if 245 <= event.pos[0] <= 445 and 285 <= event.pos[1] <= 370:
                         print(event.pos, 1)
-
+                        player = Player()
                         # start_game()
                     elif 245 <= event.pos[0] <= 570 and 390 <= event.pos[1] <= 475:
                         print(2)
