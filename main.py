@@ -2,16 +2,12 @@ import pygame
 import os
 import sys
 import random
-from menu import Menu
 from game_over import Game_over
 
 pygame.init()
-size = width, height = 600, 700
+size = width, height = 700, 800
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Tank")
-running = True
-clock = pygame.time.Clock()
-FPS = 120
 color1 = (0, 0, 0)
 color2 = (255, 255, 255)
 color3 = (255, 0, 0)
@@ -53,11 +49,11 @@ class Player(pygame.sprite.Sprite):  # игрок
 
     def update(self):
         self.playerx = 0
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                self.playerx = -1
-            if event.key == pygame.K_RIGHT:
-                self.playerx = 1
+
+        if pygame.key.get_pressed()[pygame.K_LEFT]:
+            self.playerx = -1
+        if pygame.key.get_pressed()[pygame.K_RIGHT]:
+            self.playerx = 1
         self.rect.x += self.playerx
         if self.rect.right > width:
             print(4)
@@ -80,7 +76,6 @@ class Missile(pygame.sprite.Sprite):  # снаряд
         self.rect = self.image.get_rect()
         self.rect.center = x
         self.rect.bottom = y
-
         self.coordy = -10
 
     def update(self):
@@ -126,7 +121,6 @@ class Bomb_boom(pygame.sprite.Sprite):
     def update(self):
         self.time_boom = 1000
         self.time2 = pygame.time.get_ticks()
-        print(2, self.time2)
         if self.time2 - self.time1 >= self.time_boom:
             self.time1 = self.time2
             self.kill()
@@ -146,38 +140,42 @@ for i in range(7):
     all_sprites.add(bomb)
     bombs.add(bomb)
 
-score = 0
 
-while running:
-    clock.tick(FPS)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            terminate()
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            player.missile()
+def game():
+    running = True
+    score = 0
+    while running:
 
-    collides = pygame.sprite.spritecollide(player, bombs, False)  # столкновения бомбы и игрока
-    if collides:
-        gm = Game_over(True)
-        gm.update()
-        running = False
+        clock = pygame.time.Clock()
+        FPS = 120
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                player.missile()
 
-    collides = pygame.sprite.groupcollide(bombs, missiles, True, True)
-    for i in collides:
-        score += 1
-        bm = Bomb_boom(i.rect.center)
-        all_sprites.add(bm)
-        bomb = Bomb()
-        all_sprites.add(bomb)
-        bombs.add(bomb)
-    pygame.display.update()
-    all_sprites.update()
-    screen.fill(color1)
-    draw(screen, str(score))
-    all_sprites.draw(screen)
-    pygame.display.flip()
+        collides = pygame.sprite.spritecollide(player, bombs, False)  # столкновения бомбы и игрока
+        if collides:
+            gm = Game_over(True)
+            gm.update()
+            running = False
 
-f = open("data/score.txt", 'a')
-print(str(score), file=f)
-f.close()
-pygame.quit()
+        collides = pygame.sprite.groupcollide(bombs, missiles, True, True)
+        for i in collides:
+            score += 1
+            bm = Bomb_boom(i.rect.center)
+            all_sprites.add(bm)
+            bomb = Bomb()
+            all_sprites.add(bomb)
+            bombs.add(bomb)
+        pygame.display.update()
+        all_sprites.update()
+        screen.fill(color1)
+        draw(screen, str(score))
+        all_sprites.draw(screen)
+        pygame.display.flip()
+
+    f = open("data/score.txt", 'a')
+    print(str(score), file=f)
+    f.close()
