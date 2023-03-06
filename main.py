@@ -2,10 +2,10 @@ import pygame
 import os
 import sys
 import random
-from game_over import Game_over
+from game_over import Gameover
 
 pygame.init()
-size = width, height = 600, 800
+size = width, height = 800, 800
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Tank")
 color1 = (0, 0, 0)
@@ -15,7 +15,7 @@ color4 = (0, 255, 0)
 color5 = (0, 0, 255)
 
 
-def load_image(name, colorkey=None):
+def load_image(name):
     fullname = os.path.join('data', name)
     # если файл не существует, то выходим
     if not os.path.isfile(fullname):
@@ -109,7 +109,7 @@ class Bomb(pygame.sprite.Sprite):  # бомбы
         self.image = self.image_boom
 
 
-class Bomb_boom(pygame.sprite.Sprite):
+class Bombboom(pygame.sprite.Sprite):
     def __init__(self, r_center):
         pygame.sprite.Sprite.__init__(self)
         self.image_boom = load_image("boom.png")
@@ -147,8 +147,8 @@ def game():
     while running:
 
         clock = pygame.time.Clock()
-        FPS = 120
-        clock.tick(FPS)
+        fps = 120
+        clock.tick(fps)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
@@ -157,14 +157,14 @@ def game():
 
         collides = pygame.sprite.spritecollide(player, bombs, False)  # столкновения бомбы и игрока
         if collides:
-            gm = Game_over()
+            gm = Gameover()
             gm.update()
             running = False
 
         collides = pygame.sprite.groupcollide(bombs, missiles, True, True)
-        for i in collides:
+        for j in collides:
             score += 1
-            bm = Bomb_boom(i.rect.center)
+            bm = Bombboom(j.rect.center)
             all_sprites.add(bm)
             bomb = Bomb()
             all_sprites.add(bomb)

@@ -3,7 +3,7 @@ import os
 import sys
 
 
-def load_image(name, colorkey=None):
+def load_image(name):
     fullname = os.path.join('data', name)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
@@ -12,7 +12,12 @@ def load_image(name, colorkey=None):
     return image
 
 
-class Game_over(pygame.sprite.Sprite):
+def terminate():
+    pygame.quit()
+    sys.exit()
+
+
+class Gameover(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         '''Заставка появляется, появляется фон'''
@@ -24,10 +29,6 @@ class Game_over(pygame.sprite.Sprite):
         self.start_screen()
         self.update()
 
-    def terminate(self):
-        pygame.quit()
-        sys.exit()
-
     def start_screen(self):
         fon = pygame.transform.scale(load_image('gameover.png'), (self.width, self.height))
         self.screen.blit(fon, (0, 0))
@@ -36,6 +37,5 @@ class Game_over(pygame.sprite.Sprite):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.terminate()
+                    terminate()
             pygame.display.flip()
-

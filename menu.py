@@ -6,13 +6,18 @@ import sys
 import main
 
 
-def load_image(name, colorkey=None):
+def load_image(name):
     fullname = os.path.join('data', name)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
     image = pygame.image.load(fullname)
     return image
+
+
+def terminate():
+    pygame.quit()
+    sys.exit()
 
 
 class Menu(pygame.sprite.Sprite):
@@ -28,10 +33,6 @@ class Menu(pygame.sprite.Sprite):
         self.start_screen()
         self.update()
 
-    def terminate(self):
-        pygame.quit()
-        sys.exit()
-
     def start_screen(self):
         intro_text = ["Инструкция.", "Вам дано три пункта:",
                       "Старт - запускается игра.",
@@ -42,7 +43,7 @@ class Menu(pygame.sprite.Sprite):
         font = pygame.font.Font(None, 30)
         text_coord = 50
         for line in intro_text:
-            string_rendered = font.render(line, 1, pygame.Color('black'))
+            string_rendered = font.render(line, True, pygame.Color('black'))
             intro_rect = string_rendered.get_rect()
             text_coord += 10
             intro_rect.top = text_coord
@@ -56,7 +57,7 @@ class Menu(pygame.sprite.Sprite):
         font = pygame.font.Font(None, 100)
         text_coord = 250
         for name in name_buttons:
-            string_rendered = font.render(name, 1, pygame.Color('black'))
+            string_rendered = font.render(name, True, pygame.Color('black'))
             intro_rect = string_rendered.get_rect()
             print(intro_rect)
             text_coord += 40
@@ -69,10 +70,9 @@ class Menu(pygame.sprite.Sprite):
 
     def update(self):
         while True:
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.terminate()
+                    terminate()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if 245 <= event.pos[0] <= 445 and 285 <= event.pos[1] <= 370:
                         print(event.pos, 1)
@@ -81,8 +81,8 @@ class Menu(pygame.sprite.Sprite):
                         f = open("data/score.txt", 'r')
                         print(f.read())
                         f.close()
-                    elif 245 <= event.pos[0] <= 495 and 495 <= event.pos[1] <= 580:
-                        self.terminate()
+                    elif (245 <= event.pos[0] <= 495) and (495 <= event.pos[1] <= 580):
+                        terminate()
             pygame.display.flip()
 
 
