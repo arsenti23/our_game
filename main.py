@@ -5,7 +5,7 @@ import random
 from game_over import Game_over
 
 pygame.init()
-size = width, height = 700, 800
+size = width, height = 600, 800
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Tank")
 color1 = (0, 0, 0)
@@ -157,7 +157,7 @@ def game():
 
         collides = pygame.sprite.spritecollide(player, bombs, False)  # столкновения бомбы и игрока
         if collides:
-            gm = Game_over(True)
+            gm = Game_over()
             gm.update()
             running = False
 

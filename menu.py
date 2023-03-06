@@ -21,7 +21,7 @@ class Menu(pygame.sprite.Sprite):
         '''Заставка появляется, появляется фон'''
         pygame.init()
 
-        self.size = self.width, self.height = 700, 800
+        self.size = self.width, self.height = 800, 800
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption('Tank')
         self.clock = pygame.time.Clock()
@@ -86,5 +86,5 @@ class Menu(pygame.sprite.Sprite):
             pygame.display.flip()
 
 
-f = Menu()
+menu = Menu()
 pygame.quit()
